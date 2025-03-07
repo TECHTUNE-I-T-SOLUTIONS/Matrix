@@ -8,7 +8,7 @@ import {
   Dimensions,
 } from 'react-native';
 import { Svg, Circle, Text as SvgText } from 'react-native-svg';
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import BottomNavigation from '../components/BottomNavigation';
 import { useNavigation } from '@react-navigation/native';
 import MenuModal from '../components/MenuModal';
@@ -18,6 +18,7 @@ const { width } = Dimensions.get('window');
 const PRIMARY_PURPLE = '#2E0063';
 const PROGRESS_COLOR = '#00C853'; // Color for the progress arc
 const CARD_BACKGROUND = '#F9F9F9'; // Off-white background for cards
+const TRANSACTION_BG = '#ECECEC'; // Light grey for transaction cards
 const LIGHT_TEXT = '#FFFFFF';
 const DARK_TEXT = '#333333';
 
@@ -86,6 +87,26 @@ const RegularHomeScreen = () => {
   const circleSize = 80;
   const strokeWidth = 6;
 
+  // Quick services with icon mapping
+  const quickServices = [
+    { label: 'Airtime', icon: <Ionicons name="call" size={24} color={LIGHT_TEXT} /> },
+    { label: 'Data', icon: <Ionicons name="wifi" size={24} color={LIGHT_TEXT} /> },
+    { label: 'TV', icon: <Ionicons name="tv" size={24} color={LIGHT_TEXT} /> },
+    { label: 'Exam Pins', icon: <Ionicons name="document-text-outline" size={24} color={LIGHT_TEXT} /> },
+    { label: 'Online Pay', icon: <MaterialCommunityIcons name="credit-card-outline" size={24} color={LIGHT_TEXT} /> },
+    { label: 'Electricity', icon: <Ionicons name="flash" size={24} color={LIGHT_TEXT} /> },
+    { label: 'Withdrawal', icon: <Ionicons name="arrow-down-circle" size={24} color={LIGHT_TEXT} /> },
+    { label: 'Transfers', icon: <Ionicons name="swap-horizontal" size={24} color={LIGHT_TEXT} /> },
+  ];
+
+  // Dummy recent transactions data array
+  const recentTransactions = [
+    'Sent 2gb Data to +2347084107575',
+    'Sent 10gb Data to +2348014657100',
+    'Sent 5gb Data to +2349014657100',
+    'Sent 5gb Data to +2347058465110',
+  ];
+
   return (
     <View style={styles.container}>
       {/* Top “Header” Section */}
@@ -140,50 +161,23 @@ const RegularHomeScreen = () => {
         {/* Recent Transactions “Card” */}
         <View style={styles.recentTransactionsCard}>
           <Text style={styles.sectionHeader}>Recent Transactions</Text>
-          <View style={styles.transactionList}>
-            <Text style={styles.transactionText}>
-              Successfully sent 2gb Data to +2347084107575
-            </Text>
-            <Text style={styles.transactionText}>
-              Successfully sent 10gb Data to +2348014657100
-            </Text>
-            <Text style={styles.transactionText}>
-              Successfully sent 5gb Data to +2349014657100
-            </Text>
-            <Text style={styles.transactionText}>
-              Successfully sent 5gb Data to +2347058465110
-            </Text>
-          </View>
+          {recentTransactions.map((item, index) => (
+            <View key={index} style={styles.transactionCard}>
+              <Text style={styles.transactionText}>{item}</Text>
+            </View>
+          ))}
         </View>
 
         {/* Quick Services Grid */}
         <View style={styles.quickServicesCard}>
           <Text style={styles.cardTitle}>Quick Services</Text>
           <View style={styles.quickServicesGrid}>
-            <TouchableOpacity style={styles.serviceItem}>
-              <Text style={styles.serviceText}>Airtime</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.serviceItem}>
-              <Text style={styles.serviceText}>Data</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.serviceItem}>
-              <Text style={styles.serviceText}>TV</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.serviceItem}>
-              <Text style={styles.serviceText}>Exam Pins</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.serviceItem}>
-              <Text style={styles.serviceText}>Online Pay</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.serviceItem}>
-              <Text style={styles.serviceText}>Electricity</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.serviceItem}>
-              <Text style={styles.serviceText}>Withdrawal</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.serviceItem}>
-              <Text style={styles.serviceText}>Transfers</Text>
-            </TouchableOpacity>
+            {quickServices.map((service, index) => (
+              <TouchableOpacity key={index} style={styles.serviceItem}>
+                {service.icon}
+                <Text style={styles.serviceText}>{service.label}</Text>
+              </TouchableOpacity>
+            ))}
           </View>
         </View>
 
@@ -214,13 +208,13 @@ export default RegularHomeScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f1f1f1', // Overall light background
+    backgroundColor: '#f1f1f1',
   },
   /********** TOP SECTION **********/
   topSection: {
     backgroundColor: PRIMARY_PURPLE,
     paddingHorizontal: 10,
-    paddingTop: 20,
+    paddingTop: 50,
     paddingBottom: 10,
     borderBottomLeftRadius: 30,
     borderBottomRightRadius: 30,
@@ -301,7 +295,7 @@ const styles = StyleSheet.create({
     paddingTop: 20,
   },
   recentTransactionsCard: {
-    backgroundColor: CARD_BACKGROUND,
+    backgroundColor: TRANSACTION_BG,
     borderRadius: 12,
     padding: 12,
     marginBottom: 20,
@@ -312,13 +306,20 @@ const styles = StyleSheet.create({
     color: DARK_TEXT,
     marginBottom: 10,
   },
-  transactionList: {
-    marginTop: 10,
+  transactionCard: {
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    padding: 10,
+    marginBottom: 10,
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
   },
   transactionText: {
     fontSize: 13,
     color: DARK_TEXT,
-    marginBottom: 6,
   },
   quickServicesCard: {
     backgroundColor: CARD_BACKGROUND,
@@ -346,6 +347,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     textAlign: 'center',
     fontWeight: '600',
+    marginTop: 4,
   },
   bonusBanner: {
     backgroundColor: PRIMARY_PURPLE,

@@ -1,3 +1,4 @@
+// src/components/MerchantMenuModal.tsx
 import React, { useEffect, useRef } from 'react';
 import {
   View,
@@ -12,16 +13,16 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
-const MenuModal = ({ visible, onClose }: { visible: boolean; onClose: () => void }) => {
+const MerchantMenuModal = ({ visible, onClose }: { visible: boolean; onClose: () => void }) => {
   const navigation = useNavigation();
   const slideAnim = useRef(new Animated.Value(SCREEN_WIDTH)).current;
 
   useEffect(() => {
     if (visible) {
-      // Animate the menu sliding in from the right when visible
       Animated.timing(slideAnim, {
         toValue: 0,
         duration: 300,
@@ -31,24 +32,20 @@ const MenuModal = ({ visible, onClose }: { visible: boolean; onClose: () => void
   }, [visible]);
 
   const closeMenu = () => {
-    // Slide the menu out and then call onClose
     Animated.timing(slideAnim, {
       toValue: SCREEN_WIDTH,
       duration: 300,
       useNativeDriver: true,
-    }).start(() => {
-      onClose();
-    });
+    }).start(() => onClose());
   };
 
   const menuItems = [
-    { label: 'Home', route: 'RegularHome', icon: 'home' },
-    { label: 'Offers', route: 'Offers', icon: 'pricetag' },
-    { label: 'Top-Up', route: 'TopUp', icon: 'wallet' },
-    { label: 'Dispute', route: 'Dispute', icon: 'alert-circle' },
-    { label: 'Profile', route: 'Profile', icon: 'person' },
-    { label: 'Settings', route: 'Settings', icon: 'settings' },
-    // Add more links as needed
+    { label: 'Dashboard', route: 'MerchantHome', icon: 'speedometer' },
+    { label: 'Offers', route: 'MerchantOffers', icon: 'list' },
+    { label: 'Top-Up', route: 'MerchantTopUp', icon: 'wallet' },
+    { label: 'Disputes', route: 'MerchantDispute', icon: 'alert-circle' },
+    { label: 'Profile', route: 'MerchantProfile', icon: 'person' },
+    { label: 'Settings', route: 'MerchantSettings', icon: 'settings' },
   ];
 
   return (
@@ -56,8 +53,13 @@ const MenuModal = ({ visible, onClose }: { visible: boolean; onClose: () => void
       <TouchableWithoutFeedback onPress={closeMenu}>
         <View style={styles.overlay}>
           <Animated.View style={[styles.menuContainer, { transform: [{ translateX: slideAnim }] }]}>
+            <LinearGradient
+              colors={['#0f2027', '#203a43', '#2c5364']}
+              style={styles.gradientHeader}
+            >
+              <Text style={styles.menuHeader}>Merchant Menu</Text>
+            </LinearGradient>
             <ScrollView contentContainerStyle={styles.container}>
-              <Text style={styles.menuHeader}>Menu</Text>
               {menuItems.map((item, index) => (
                 <TouchableOpacity
                   key={index}
@@ -67,7 +69,7 @@ const MenuModal = ({ visible, onClose }: { visible: boolean; onClose: () => void
                     navigation.navigate(item.route as never);
                   }}
                 >
-                  <Ionicons name={item.icon} size={24} color="#6200ee" style={styles.menuIcon} />
+                  <Ionicons name={item.icon} size={24} color="#2c5364" style={styles.menuIcon} />
                   <Text style={styles.menuLabel}>{item.label}</Text>
                 </TouchableOpacity>
               ))}
@@ -82,36 +84,41 @@ const MenuModal = ({ visible, onClose }: { visible: boolean; onClose: () => void
   );
 };
 
-export default MenuModal;
+export default MerchantMenuModal;
 
 const styles = StyleSheet.create({
   overlay: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.3)', // Semi-transparent overlay so the home screen is visible underneath
+    backgroundColor: 'rgba(0,0,0,0.4)', // Semi-transparent overlay
     justifyContent: 'flex-start',
-    alignItems: 'flex-end', // Align menu container to the right
+    alignItems: 'flex-end',
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
   },
   menuContainer: {
     width: '50%',
     height: '100%',
     backgroundColor: '#fff',
     padding: 20,
-    // iOS shadow
     shadowColor: '#000',
     shadowOffset: { width: -2, height: 0 },
     shadowOpacity: 0.3,
     shadowRadius: 5,
-    // Android elevation
     elevation: 5,
   },
-  container: {
-    flexGrow: 1,
+  gradientHeader: {
+    padding: 20,
+    justifyContent: 'center',
+    borderRadius: 8,
   },
   menuHeader: {
     fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: 20,
-    color: '#6200ee',
+    color: '#fff',
+  },
+  container: {
+    paddingVertical: 10,
   },
   menuItem: {
     flexDirection: 'row',
@@ -125,11 +132,11 @@ const styles = StyleSheet.create({
   },
   menuLabel: {
     fontSize: 18,
-    color: '#333',
+    color: '#2c5364',
   },
   closeButton: {
     marginTop: 30,
-    backgroundColor: '#6200ee',
+    backgroundColor: '#2c5364',
     paddingVertical: 15,
     borderRadius: 10,
     alignItems: 'center',

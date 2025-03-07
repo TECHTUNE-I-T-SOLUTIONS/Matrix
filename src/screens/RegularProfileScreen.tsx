@@ -11,6 +11,7 @@ import { Ionicons } from '@expo/vector-icons';
 import BottomNavigation from '../components/BottomNavigation';
 import Loader from '../components/Loader';
 import { useNavigation } from '@react-navigation/native';
+import MenuModal from '../components/MenuModal';
 
 const PRIMARY_PURPLE = '#2E0063';
 const LIGHT_TEXT = '#FFFFFF';
@@ -19,6 +20,7 @@ const CARD_BACKGROUND = '#FFFFFF';
 
 const RegularProfileScreen = () => {
   const navigation = useNavigation();
+  const [menuVisible, setMenuVisible] = useState(false);  
 
   // States for toggling sections
   const [showEditProfile, setShowEditProfile] = useState(false);
@@ -69,6 +71,12 @@ const RegularProfileScreen = () => {
           <Ionicons name="arrow-back" size={26} color={LIGHT_TEXT} />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Profile</Text>
+        <TouchableOpacity
+          style={styles.menuButton}
+          onPress={() => setMenuVisible(true)}
+        >
+          <Ionicons name="menu" size={26} color={LIGHT_TEXT} />
+        </TouchableOpacity>
       </View>
 
       {/* Scrollable Content */}
@@ -289,6 +297,8 @@ const RegularProfileScreen = () => {
       <View style={styles.bottomNavigationContainer}>
         <BottomNavigation navigation={navigation} />
       </View>
+      {/* Menu Modal */}
+      <MenuModal visible={menuVisible} onClose={() => setMenuVisible(false)} />
     </View>
   );
 };
@@ -308,6 +318,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',    
   },
   backButton: {
     marginRight: 15,
@@ -317,6 +328,10 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: LIGHT_TEXT,
   },
+  menuButton: {
+    padding: 5,
+  },
+  
   /********** SCROLL CONTENT **********/
   scrollContainer: {
     flexGrow: 1,

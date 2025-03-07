@@ -12,11 +12,19 @@ import RegularOffersScreen from '../screens/RegularOffersScreen';
 import RegularProfileScreen from '../screens/RegularProfileScreen';
 import RegularTopupScreen from '../screens/RegularTopupScreen';
 import RegularDisputeScreen from '../screens/RegularDisputeScreen';
+import RegularSettingsScreen from '../screens/RegularSettingsScreen'; // New Settings screen
 import MerchantScreen from '../screens/MerchantScreen';
 import MerchantLogin from '../screens/MerchantLogin';
 import MerchantSignup from '../screens/MerchantSignup';
 import MerchantForgot from '../screens/MerchantForgot';
-import MenuScreen from '../components/MenuScreen'; // New Menu component
+import MerchantHomeScreen from '../screens/MerchantHomeScreen';
+import MerchantDisputeScreen from '../screens/MerchantDisputeScreen';
+import MerchantOffersScreen from '../screens/MerchantOffersScreen';
+import MerchantProfileScreen from '../screens/MerchantProfileScreen';
+import MerchantSettingsScreen from '../screens/MerchantSettingsScreen';
+import MerchantTopupScreen from '../screens/MerchantTopupScreen';
+import MerchantMenuModal from '../components/MerchantMenuModal'; // New Merchant Menu Modal
+import MenuScreen from '../components/MenuScreen'; // Regular Menu component (if needed)
 
 const Stack = createStackNavigator();
 
@@ -82,7 +90,12 @@ const AppNavigator = () => {
           component={RegularDisputeScreen}
           options={{ headerShown: false }}
         />
-        {/* Menu Screen */}
+        <Stack.Screen
+          name="Settings"
+          component={RegularSettingsScreen}
+          options={{ headerShown: false }}
+        />
+        {/* Regular Menu Modal */}
         <Stack.Screen
           name="Menu"
           component={MenuScreen}
@@ -112,6 +125,45 @@ const AppNavigator = () => {
           name="MerchantForgot"
           component={MerchantForgot}
           options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="MerchantHome"
+          component={MerchantHomeScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="MerchantDispute"
+          component={MerchantDisputeScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="MerchantOffers"
+          component={MerchantOffersScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="MerchantProfile"
+          component={MerchantProfileScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="MerchantSettings"
+          component={MerchantSettingsScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="MerchantTopup"
+          component={MerchantTopupScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="MerchantMenu"
+          component={MerchantMenuModal}
+          options={{
+            headerShown: false,
+            presentation: 'transparentModal',
+            cardStyle: { backgroundColor: 'transparent' },
+          }}
         />
       </Stack.Navigator>
     </NavigationContainer>

@@ -1,32 +1,29 @@
+// src/components/Loader.tsx
 import React from 'react';
-import { View, Text, ActivityIndicator, StyleSheet } from 'react-native';
+import { View, ActivityIndicator, StyleSheet } from 'react-native';
 
-const Loader = () => {
+interface LoaderProps {
+  transparent?: boolean;
+}
+
+const Loader: React.FC<LoaderProps> = ({ transparent = false }) => {
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, transparent && styles.transparentContainer]}>
       <ActivityIndicator size="large" color="#6200ee" />
-      <Text style={styles.text}>Loading...</Text>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: '#ffffff',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
-    position: 'absolute',
-    top: 0,
-    bottom: 0,
-    left: 0,
-    right: 0,
-    zIndex: 999, // Ensure it appears above other content
+    zIndex: 1000,
   },
-  text: {
-    marginTop: 10,
-    fontSize: 16,
-    color: '#fff',
+  transparentContainer: {
+    backgroundColor: 'rgba(255,255,255,0.5)',
   },
 });
 

@@ -1,25 +1,47 @@
 import React, { useState } from 'react';
-import { View, Text, ImageBackground, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
-import { Ionicons } from '@expo/vector-icons'; // For the back button icon
+import {
+  View,
+  Text,
+  ImageBackground,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+} from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import Loader from '../components/Loader';
+import { useNavigation } from '@react-navigation/native';
 
 const MerchantLogin = ({ navigation }: { navigation: any }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleLogin = () => {
-    // Add your login logic here
+    // Simulate login logic
     console.log('Logging in with:', email, password);
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+      navigation.navigate('MerchantHome');
+    }, 2000);
   };
+
+  if (isLoading) {
+    return <Loader />;
+  }
 
   return (
     <ImageBackground
-      source={require('../../assets/images/MerchantLoginBackground.png')} // Add your background image
+      source={require('../../assets/images/MerchantLoginBackground.png')}
       style={styles.background}
     >
       {/* Dark overlay */}
       <View style={styles.overlay} />
       {/* Back button */}
-      <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+      <TouchableOpacity
+        style={styles.backButton}
+        onPress={() => navigation.goBack()}
+      >
         <Ionicons name="arrow-back" size={26} color="#fff" />
       </TouchableOpacity>
       <View style={styles.container}>
@@ -30,6 +52,7 @@ const MerchantLogin = ({ navigation }: { navigation: any }) => {
           value={email}
           onChangeText={setEmail}
           keyboardType="email-address"
+          placeholderTextColor="#999"
         />
         <TextInput
           style={styles.input}
@@ -37,6 +60,7 @@ const MerchantLogin = ({ navigation }: { navigation: any }) => {
           value={password}
           onChangeText={setPassword}
           secureTextEntry
+          placeholderTextColor="#999"
         />
         <TouchableOpacity style={styles.button} onPress={handleLogin}>
           <Text style={styles.buttonText}>Login</Text>
@@ -53,6 +77,8 @@ const MerchantLogin = ({ navigation }: { navigation: any }) => {
     </ImageBackground>
   );
 };
+
+export default MerchantLogin;
 
 const styles = StyleSheet.create({
   background: {
@@ -119,5 +145,3 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 });
-
-export default MerchantLogin;

@@ -1,6 +1,18 @@
+// src/screens/RegularSignupScreen.tsx
 import React, { useState } from 'react';
-import { View, Text, ImageBackground, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
-import { Ionicons } from '@expo/vector-icons'; // For the back button icon
+import {
+  View,
+  Text,
+  ImageBackground,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  Alert,
+} from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+import { supabase } from '../supabaseClient';
+import Loader from '../components/Loader';
 
 const RegularSignupScreen = ({ navigation }: { navigation: any }) => {
   const [email, setEmail] = useState('');
@@ -8,11 +20,48 @@ const RegularSignupScreen = ({ navigation }: { navigation: any }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSignup = () => {
-    // Add your signup logic here
-    console.log('Signing up with:', email, mobile, username, password);
+  const handleSignup = async () => {
+    if (password !== confirmPassword) {
+      Alert.alert('Error', 'Passwords do not match.');
+      return;
+    }
+    setIsLoading(true);
+
+    // Sign up the user with Supabase auth
+    const { user, error } = await supabase.auth.signUp({
+      email,
+      password,
+    });
+
+    if (error) {
+      setIsLoading(false);
+      Alert.alert('Signup Error', error.message);
+    } else {
+      // Insert additional info into your "profiles" table
+      const { error: profileError } = await supabase.from('profiles').insert([
+        { id: user?.id, username, mobile },
+      ]);
+
+      setIsLoading(false);
+
+      if (profileError) {
+        Alert.alert('Profile Error', profileError.message);
+      } else {
+        // Simulate OTP confirmation step by instructing the user to check their email
+        Alert.alert(
+          'Signup Successful',
+          'A confirmation link has been sent to your email. Please verify your email before logging in.'
+        );
+        navigation.navigate('RegularLogin');
+      }
+    }
   };
+
+  if (isLoading) {
+    return <Loader transparent />;
+  }
 
   return (
     <ImageBackground
@@ -33,6 +82,7 @@ const RegularSignupScreen = ({ navigation }: { navigation: any }) => {
           value={email}
           onChangeText={setEmail}
           keyboardType="email-address"
+          placeholderTextColor="#999"
         />
         <TextInput
           style={styles.input}
@@ -40,12 +90,14 @@ const RegularSignupScreen = ({ navigation }: { navigation: any }) => {
           value={mobile}
           onChangeText={setMobile}
           keyboardType="phone-pad"
+          placeholderTextColor="#999"
         />
         <TextInput
           style={styles.input}
           placeholder="Username"
           value={username}
           onChangeText={setUsername}
+          placeholderTextColor="#999"
         />
         <TextInput
           style={styles.input}
@@ -53,6 +105,7 @@ const RegularSignupScreen = ({ navigation }: { navigation: any }) => {
           value={password}
           onChangeText={setPassword}
           secureTextEntry
+          placeholderTextColor="#999"
         />
         <TextInput
           style={styles.input}
@@ -60,6 +113,7 @@ const RegularSignupScreen = ({ navigation }: { navigation: any }) => {
           value={confirmPassword}
           onChangeText={setConfirmPassword}
           secureTextEntry
+          placeholderTextColor="#999"
         />
         <TouchableOpacity style={styles.button} onPress={handleSignup}>
           <Text style={styles.buttonText}>Proceed</Text>
@@ -85,7 +139,7 @@ const styles = StyleSheet.create({
   },
   overlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Dark overlay
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   backButton: {
     position: 'absolute',
@@ -116,7 +170,7 @@ const styles = StyleSheet.create({
     width: '100%',
     padding: 15,
     marginVertical: 10,
-    backgroundColor: '#6200ee', // Purple color
+    backgroundColor: '#6200ee',
     borderRadius: 10,
     alignItems: 'center',
   },
