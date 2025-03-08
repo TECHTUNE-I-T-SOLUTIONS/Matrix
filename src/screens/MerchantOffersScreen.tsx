@@ -1,3 +1,4 @@
+// src/screens/MerchantOffersScreen.tsx
 import React, { useState } from 'react';
 import {
   View,
@@ -8,314 +9,240 @@ import {
   Dimensions,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import BottomNavigation from '../components/BottomNavigation';
+import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
-import MenuModal from '../components/MenuModal';
-
+import MerchantBottomNavigation from '../components/MerchantBottomNavigation';
+import MerchantMenuModal from '../components/MerchantMenuModal';
 
 const { width } = Dimensions.get('window');
 
-// Reuse color constants for consistency
-const PRIMARY_PURPLE = '#2E0063';
+const PRIMARY_COLOR = '#2c5364'; // Merchant theme primary color
 const CARD_BACKGROUND = '#FFFFFF';
 const LIGHT_TEXT = '#FFFFFF';
 const DARK_TEXT = '#333333';
 
-const RegularOffersScreen = () => {
+const MerchantOffersScreen = () => {
   const navigation = useNavigation();
-  const [menuVisible, setMenuVisible] = useState(false);  
+  const [menuVisible, setMenuVisible] = useState(false);
 
   return (
     <View style={styles.container}>
-      {/* Top Header Section */}
-      <View style={styles.headerContainer}>
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => navigation.goBack()}
-        >
-          <Ionicons name="arrow-back" size={26} color={LIGHT_TEXT} />
+      {/* Gradient Header */}
+      <LinearGradient
+        colors={['#0f2027', '#203a43', '#2c5364']}
+        style={styles.headerContainer}
+      >
+        <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+          <Ionicons name="arrow-back" size={26} color="#fff" />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Offers</Text>
-        {/* Menu Icon at the top right */}
-        <TouchableOpacity
-          style={styles.menuButton}
-          onPress={() => setMenuVisible(true)}
-        >
-          <Ionicons name="menu" size={26} color={LIGHT_TEXT} />
+        <TouchableOpacity style={styles.menuButton} onPress={() => setMenuVisible(true)}>
+          <Ionicons name="menu" size={26} color="#fff" />
         </TouchableOpacity>
-      </View>
+      </LinearGradient>
 
       {/* Scrollable Content */}
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
+      <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>
         {/* DATA PLANS */}
         <View style={styles.sectionCard}>
           <Text style={styles.sectionTitle}>
-            <Ionicons name="wifi" size={20} color={PRIMARY_PURPLE} /> DATA PLANS
+            <Ionicons name="wifi" size={20} color={PRIMARY_COLOR} /> DATA PLANS
           </Text>
           <TouchableOpacity style={styles.option}>
             <View style={styles.optionRow}>
-              <Ionicons name="time-outline" size={20} color={PRIMARY_PURPLE} />
+              <Ionicons name="time-outline" size={20} color={PRIMARY_COLOR} />
               <Text style={styles.optionText}>Daily Plans</Text>
             </View>
-            <Ionicons name="arrow-forward" size={18} color={PRIMARY_PURPLE} />
+            <Ionicons name="arrow-forward" size={18} color={PRIMARY_COLOR} />
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.option}>
             <View style={styles.optionRow}>
-              <Ionicons name="calendar-outline" size={20} color={PRIMARY_PURPLE} />
+              <Ionicons name="calendar-outline" size={20} color={PRIMARY_COLOR} />
               <Text style={styles.optionText}>Weekly Plans</Text>
             </View>
-            <Ionicons name="arrow-forward" size={18} color={PRIMARY_PURPLE} />
+            <Ionicons name="arrow-forward" size={18} color={PRIMARY_COLOR} />
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.option}>
             <View style={styles.optionRow}>
-              <Ionicons name="calendar" size={20} color={PRIMARY_PURPLE} />
+              <Ionicons name="calendar" size={20} color={PRIMARY_COLOR} />
               <Text style={styles.optionText}>Monthly Plans</Text>
             </View>
-            <Ionicons name="arrow-forward" size={18} color={PRIMARY_PURPLE} />
+            <Ionicons name="arrow-forward" size={18} color={PRIMARY_COLOR} />
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.option}>
             <View style={styles.optionRow}>
-              <Ionicons
-                name="calendar-sharp"
-                size={20}
-                color={PRIMARY_PURPLE}
-              />
+              <Ionicons name="calendar-sharp" size={20} color={PRIMARY_COLOR} />
               <Text style={styles.optionText}>Yearly Plans</Text>
             </View>
-            <Ionicons name="arrow-forward" size={18} color={PRIMARY_PURPLE} />
+            <Ionicons name="arrow-forward" size={18} color={PRIMARY_COLOR} />
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.option}>
             <View style={styles.optionRow}>
-              <Ionicons name="options-outline" size={20} color={PRIMARY_PURPLE} />
+              <Ionicons name="options-outline" size={20} color={PRIMARY_COLOR} />
               <Text style={styles.optionText}>Custom Plans</Text>
             </View>
-            <Ionicons name="arrow-forward" size={18} color={PRIMARY_PURPLE} />
+            <Ionicons name="arrow-forward" size={18} color={PRIMARY_COLOR} />
           </TouchableOpacity>
         </View>
 
         {/* AIRTIME PLANS */}
         <View style={styles.sectionCard}>
           <Text style={styles.sectionTitle}>
-            <Ionicons name="call" size={20} color={PRIMARY_PURPLE} /> AIRTIME
-            PLANS
+            <Ionicons name="call" size={20} color={PRIMARY_COLOR} /> AIRTIME PLANS
           </Text>
           <TouchableOpacity style={styles.option}>
             <View style={styles.optionRow}>
-              <Ionicons name="airplane-outline" size={20} color={PRIMARY_PURPLE} />
+              <Ionicons name="airplane-outline" size={20} color={PRIMARY_COLOR} />
               <Text style={styles.optionText}>Roaming Plans</Text>
             </View>
-            <Ionicons name="arrow-forward" size={18} color={PRIMARY_PURPLE} />
+            <Ionicons name="arrow-forward" size={18} color={PRIMARY_COLOR} />
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.option}>
             <View style={styles.optionRow}>
-              <Ionicons name="call" size={20} color={PRIMARY_PURPLE} />
+              <Ionicons name="call" size={20} color={PRIMARY_COLOR} />
               <Text style={styles.optionText}>Avoor Plans</Text>
             </View>
-            <Ionicons name="arrow-forward" size={18} color={PRIMARY_PURPLE} />
+            <Ionicons name="arrow-forward" size={18} color={PRIMARY_COLOR} />
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.option}>
             <View style={styles.optionRow}>
-              <Ionicons
-                name="earth-outline"
-                size={20}
-                color={PRIMARY_PURPLE}
-              />
+              <Ionicons name="earth-outline" size={20} color={PRIMARY_COLOR} />
               <Text style={styles.optionText}>International Plans</Text>
             </View>
-            <Ionicons name="arrow-forward" size={18} color={PRIMARY_PURPLE} />
+            <Ionicons name="arrow-forward" size={18} color={PRIMARY_COLOR} />
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.option}>
             <View style={styles.optionRow}>
-              <Ionicons
-                name="card-outline"
-                size={20}
-                color={PRIMARY_PURPLE}
-              />
+              <Ionicons name="card-outline" size={20} color={PRIMARY_COLOR} />
               <Text style={styles.optionText}>Recharge Cards</Text>
             </View>
-            <Ionicons name="arrow-forward" size={18} color={PRIMARY_PURPLE} />
+            <Ionicons name="arrow-forward" size={18} color={PRIMARY_COLOR} />
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.option}>
             <View style={styles.optionRow}>
-              <Ionicons name="cash-outline" size={20} color={PRIMARY_PURPLE} />
+              <Ionicons name="cash-outline" size={20} color={PRIMARY_COLOR} />
               <Text style={styles.optionText}>VTU</Text>
             </View>
-            <Ionicons name="arrow-forward" size={18} color={PRIMARY_PURPLE} />
+            <Ionicons name="arrow-forward" size={18} color={PRIMARY_COLOR} />
           </TouchableOpacity>
         </View>
 
         {/* TV SUBSCRIPTIONS */}
         <View style={styles.sectionCard}>
           <Text style={styles.sectionTitle}>
-            <Ionicons name="tv-outline" size={20} color={PRIMARY_PURPLE} /> TV
-            SUBSCRIPTIONS
+            <Ionicons name="tv-outline" size={20} color={PRIMARY_COLOR} /> TV SUBSCRIPTIONS
           </Text>
           <TouchableOpacity style={styles.option}>
             <View style={styles.optionRow}>
-              <Ionicons name="tv" size={20} color={PRIMARY_PURPLE} />
+              <Ionicons name="tv" size={20} color={PRIMARY_COLOR} />
               <Text style={styles.optionText}>Stoffmes</Text>
             </View>
-            <Ionicons name="arrow-forward" size={18} color={PRIMARY_PURPLE} />
+            <Ionicons name="arrow-forward" size={18} color={PRIMARY_COLOR} />
           </TouchableOpacity>
-
           <TouchableOpacity style={styles.option}>
             <View style={styles.optionRow}>
-              <Ionicons name="tv" size={20} color={PRIMARY_PURPLE} />
+              <Ionicons name="tv" size={20} color={PRIMARY_COLOR} />
               <Text style={styles.optionText}>StartTimes</Text>
             </View>
-            <Ionicons name="arrow-forward" size={18} color={PRIMARY_PURPLE} />
+            <Ionicons name="arrow-forward" size={18} color={PRIMARY_COLOR} />
           </TouchableOpacity>
-
           <TouchableOpacity style={styles.option}>
             <View style={styles.optionRow}>
-              <Ionicons name="tv" size={20} color={PRIMARY_PURPLE} />
+              <Ionicons name="tv" size={20} color={PRIMARY_COLOR} />
               <Text style={styles.optionText}>GoTV</Text>
             </View>
-            <Ionicons name="arrow-forward" size={18} color={PRIMARY_PURPLE} />
+            <Ionicons name="arrow-forward" size={18} color={PRIMARY_COLOR} />
           </TouchableOpacity>
-
           <TouchableOpacity style={styles.option}>
             <View style={styles.optionRow}>
-              <Ionicons name="tv" size={20} color={PRIMARY_PURPLE} />
+              <Ionicons name="tv" size={20} color={PRIMARY_COLOR} />
               <Text style={styles.optionText}>ROKU</Text>
             </View>
-            <Ionicons name="arrow-forward" size={18} color={PRIMARY_PURPLE} />
+            <Ionicons name="arrow-forward" size={18} color={PRIMARY_COLOR} />
           </TouchableOpacity>
-
           <TouchableOpacity style={styles.option}>
             <View style={styles.optionRow}>
-              <Ionicons name="tv" size={20} color={PRIMARY_PURPLE} />
+              <Ionicons name="tv" size={20} color={PRIMARY_COLOR} />
               <Text style={styles.optionText}>DSTV</Text>
             </View>
-            <Ionicons name="arrow-forward" size={18} color={PRIMARY_PURPLE} />
+            <Ionicons name="arrow-forward" size={18} color={PRIMARY_COLOR} />
           </TouchableOpacity>
-
           <TouchableOpacity style={styles.option}>
             <View style={styles.optionRow}>
-              <Ionicons name="tv" size={20} color={PRIMARY_PURPLE} />
+              <Ionicons name="tv" size={20} color={PRIMARY_COLOR} />
               <Text style={styles.optionText}>Others</Text>
             </View>
-            <Ionicons name="arrow-forward" size={18} color={PRIMARY_PURPLE} />
+            <Ionicons name="arrow-forward" size={18} color={PRIMARY_COLOR} />
           </TouchableOpacity>
         </View>
 
         {/* EXAM PINS */}
         <View style={styles.sectionCard}>
           <Text style={styles.sectionTitle}>
-            <Ionicons name="school-outline" size={20} color={PRIMARY_PURPLE} /> EXAM
-            PINS
+            <Ionicons name="school-outline" size={20} color={PRIMARY_COLOR} /> EXAM PINS
           </Text>
           <TouchableOpacity style={styles.option}>
             <View style={styles.optionRow}>
-              <Ionicons
-                name="document-text-outline"
-                size={20}
-                color={PRIMARY_PURPLE}
-              />
+              <Ionicons name="document-text-outline" size={20} color={PRIMARY_COLOR} />
               <Text style={styles.optionText}>WAEC</Text>
             </View>
-            <Ionicons name="arrow-forward" size={18} color={PRIMARY_PURPLE} />
+            <Ionicons name="arrow-forward" size={18} color={PRIMARY_COLOR} />
           </TouchableOpacity>
-
           <TouchableOpacity style={styles.option}>
             <View style={styles.optionRow}>
-              <Ionicons
-                name="document-text-outline"
-                size={20}
-                color={PRIMARY_PURPLE}
-              />
+              <Ionicons name="document-text-outline" size={20} color={PRIMARY_COLOR} />
               <Text style={styles.optionText}>NECO</Text>
             </View>
-            <Ionicons name="arrow-forward" size={18} color={PRIMARY_PURPLE} />
+            <Ionicons name="arrow-forward" size={18} color={PRIMARY_COLOR} />
           </TouchableOpacity>
-
           <TouchableOpacity style={styles.option}>
             <View style={styles.optionRow}>
-              <Ionicons
-                name="document-text-outline"
-                size={20}
-                color={PRIMARY_PURPLE}
-              />
+              <Ionicons name="document-text-outline" size={20} color={PRIMARY_COLOR} />
               <Text style={styles.optionText}>NABTEB</Text>
             </View>
-            <Ionicons name="arrow-forward" size={18} color={PRIMARY_PURPLE} />
+            <Ionicons name="arrow-forward" size={18} color={PRIMARY_COLOR} />
           </TouchableOpacity>
         </View>
 
-        {/* ELECTRICITY METER SUBSCRIPTION */}
-        <View style={styles.sectionCard}>
-          <Text style={styles.sectionTitle}>
-            <Ionicons
-              name="flash-outline"
-              size={20}
-              color={PRIMARY_PURPLE}
-            />{' '}
-            ELECTRICITY METER SUBSCRIPTION
-          </Text>
-          <TouchableOpacity style={styles.option}>
-            <View style={styles.optionRow}>
-              <Ionicons name="flash" size={20} color={PRIMARY_PURPLE} />
-              <Text style={styles.optionText}>IEBDC</Text>
-            </View>
-            <Ionicons name="arrow-forward" size={18} color={PRIMARY_PURPLE} />
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.option}>
-            <View style={styles.optionRow}>
-              <Ionicons name="flash" size={20} color={PRIMARY_PURPLE} />
-              <Text style={styles.optionText}>IEBDC</Text>
-            </View>
-            <Ionicons name="arrow-forward" size={18} color={PRIMARY_PURPLE} />
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.option}>
-            <View style={styles.optionRow}>
-              <Ionicons name="flash" size={20} color={PRIMARY_PURPLE} />
-              <Text style={styles.optionText}>OTHERS</Text>
-            </View>
-            <Ionicons name="arrow-forward" size={18} color={PRIMARY_PURPLE} />
-          </TouchableOpacity>
-        </View>
-
-        {/* Extra bottom spacing so content is visible above Bottom Nav */}
+        {/* Additional sections can be added here */}
         <View style={{ height: 100 }} />
       </ScrollView>
 
       {/* Fixed Bottom Navigation */}
       <View style={styles.bottomNavigationContainer}>
-        <BottomNavigation navigation={navigation} />
+        <MerchantBottomNavigation navigation={navigation} />
       </View>
 
-      {/* Menu Modal */}
-      <MenuModal visible={menuVisible} onClose={() => setMenuVisible(false)} />      
+      {/* Merchant Menu Modal */}
+      <MerchantMenuModal visible={menuVisible} onClose={() => setMenuVisible(false)} />
     </View>
   );
 };
 
-export default RegularOffersScreen;
+export default MerchantOffersScreen;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f1f1f1', // Lighter overall background
+    backgroundColor: '#fff',
   },
   /********** HEADER **********/
   headerContainer: {
-    backgroundColor: PRIMARY_PURPLE,
+    backgroundColor: PRIMARY_COLOR,
     paddingTop: 50,
     paddingBottom: 20,
     paddingHorizontal: 20,
-    alignItems: 'center',
     flexDirection: 'row',
-    justifyContent: 'space-between',    
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   backButton: {
     marginRight: 15,
@@ -325,24 +252,19 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: LIGHT_TEXT,
   },
-
   menuButton: {
     padding: 5,
   },
-  
   /********** SCROLL CONTENT **********/
   scrollContainer: {
     paddingHorizontal: 20,
     paddingTop: 10,
   },
-
-  /********** SECTION CARDS **********/
   sectionCard: {
     backgroundColor: CARD_BACKGROUND,
     borderRadius: 12,
     padding: 15,
     marginBottom: 15,
-    // Optional: shadow or elevation for Android
     elevation: 2,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
@@ -355,7 +277,6 @@ const styles = StyleSheet.create({
     color: DARK_TEXT,
     marginBottom: 10,
   },
-  /********** OPTIONS **********/
   option: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -375,7 +296,6 @@ const styles = StyleSheet.create({
     color: DARK_TEXT,
     marginLeft: 10,
   },
-
   /********** BOTTOM NAVIGATION **********/
   bottomNavigationContainer: {
     position: 'absolute',

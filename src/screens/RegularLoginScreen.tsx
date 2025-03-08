@@ -1,21 +1,42 @@
+// src/screens/RegularLoginScreen.tsx
 import React, { useState } from 'react';
-import { View, Text, ImageBackground, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
-import { Ionicons } from '@expo/vector-icons'; // For the back button icon
-import Loader from '../components/Loader'; // Import the Loader component
+import {
+  View,
+  Text,
+  ImageBackground,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  Alert,
+} from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import Loader from '../components/Loader';
+import { useNavigation } from '@react-navigation/native';
+import { supabase } from '../supabaseClient';
 
 const RegularLoginScreen = ({ navigation }: { navigation: any }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false); // State to manage loading
+  const [loading, setLoading] = useState(false);
 
-  const handleLogin = () => {
-    // Simulate a login process
-    setLoading(true); // Show loader
-    setTimeout(() => {
-      setLoading(false); // Hide loader
-      navigation.navigate('RegularHome'); // Navigate to RegularHomeScreen after login
-    }, 2000); // Simulate a 2-second delay
+  const handleLogin = async () => {
+    setLoading(true);
+    const { error } = await supabase.auth.signIn({
+      email,
+      password,
+    });
+    setLoading(false);
+
+    if (error) {
+      Alert.alert('Login Error', error.message);
+    } else {
+      navigation.navigate('RegularHome');
+    }
   };
+
+  if (loading) {
+    return <Loader transparent />;
+  }
 
   return (
     <ImageBackground
@@ -36,6 +57,7 @@ const RegularLoginScreen = ({ navigation }: { navigation: any }) => {
           value={email}
           onChangeText={setEmail}
           keyboardType="email-address"
+          placeholderTextColor="#999"
         />
         <TextInput
           style={styles.input}
@@ -43,6 +65,7 @@ const RegularLoginScreen = ({ navigation }: { navigation: any }) => {
           value={password}
           onChangeText={setPassword}
           secureTextEntry
+          placeholderTextColor="#999"
         />
         <TouchableOpacity style={styles.button} onPress={handleLogin}>
           <Text style={styles.buttonText}>Login</Text>
@@ -56,11 +79,11 @@ const RegularLoginScreen = ({ navigation }: { navigation: any }) => {
         <Text style={styles.footerText}>Matrix v.1</Text>
         <Text style={styles.footerText}>© 2025 Matrix. All rights reserved.</Text>
       </View>
-      {/* Loader */}
-      {loading && <Loader />}
     </ImageBackground>
   );
 };
+
+export default RegularLoginScreen;
 
 const styles = StyleSheet.create({
   background: {
@@ -70,7 +93,7 @@ const styles = StyleSheet.create({
   },
   overlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Dark overlay
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   backButton: {
     position: 'absolute',
@@ -101,7 +124,7 @@ const styles = StyleSheet.create({
     width: '100%',
     padding: 15,
     marginVertical: 10,
-    backgroundColor: '#6200ee', // Purple color
+    backgroundColor: '#6200ee',
     borderRadius: 10,
     alignItems: 'center',
   },
@@ -113,11 +136,11 @@ const styles = StyleSheet.create({
   linkText: {
     color: '#fff',
     fontSize: 14,
-    marginTop: 2,
+    marginTop: 10,
   },
   footer: {
     position: 'absolute',
-    bottom: 1,
+    bottom: 20,
     left: 0,
     right: 0,
     alignItems: 'center',
@@ -127,5 +150,3 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
 });
-
-export default RegularLoginScreen;

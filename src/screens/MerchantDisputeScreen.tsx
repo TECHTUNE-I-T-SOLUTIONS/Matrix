@@ -1,48 +1,56 @@
+// src/screens/MerchantDisputeScreen.tsx
 import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-  ScrollView,
+import { 
+  View, 
+  Text, 
+  StyleSheet, 
+  TextInput, 
+  TouchableOpacity, 
+  ScrollView 
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
-import BottomNavigation from '../components/BottomNavigation';
-import MenuModal from '../components/MenuModal';
+import MerchantBottomNavigation from '../components/MerchantBottomNavigation';
+import MerchantMenuModal from '../components/MerchantMenuModal';
 
 const PRIMARY_PURPLE = '#2E0063';
 const LIGHT_TEXT = '#FFFFFF';
 const DARK_TEXT = '#333333';
 const CARD_BACKGROUND = '#FFFFFF';
 
-const RegularDisputeScreen = () => {
+const MerchantDisputeScreen = () => {
   const navigation = useNavigation();
   const [menuVisible, setMenuVisible] = useState(false);
+  const [transactionType, setTransactionType] = useState('');
+  const [description, setDescription] = useState('');
+
+  const handleSubmit = () => {
+    // Implement your dispute submission logic here
+    console.log('Dispute submitted:', transactionType, description);
+  };
 
   return (
     <View style={styles.container}>
-      {/* Header */}
-      <View style={styles.headerContainer}>
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => navigation.goBack()}
-        >
-          <Ionicons name="arrow-back" size={26} color={LIGHT_TEXT} />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Disputes</Text>
-        <TouchableOpacity
-          style={styles.menuButton}
-          onPress={() => setMenuVisible(true)}
-        >
-          <Ionicons name="menu" size={26} color={LIGHT_TEXT} />
-        </TouchableOpacity>
-      </View>
+      {/* Gradient Header */}
+      <LinearGradient 
+        colors={['#0f2027', '#203a43', '#2c5364']} 
+        style={styles.headerContainer}
+      >
+        <View style={styles.headerContent}>
+          <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+            <Ionicons name="arrow-back" size={26} color="#fff" />
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>Merchant Disputes</Text>
+          <TouchableOpacity style={styles.menuButton} onPress={() => setMenuVisible(true)}>
+            <Ionicons name="menu" size={26} color="#fff" />
+          </TouchableOpacity>
+        </View>
+      </LinearGradient>
 
-      {/* Scrollable Content */}
+      {/* Main Content */}
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        {/* Balance Card */}
+        {/* Optional Balance Card */}
         <View style={styles.balanceCard}>
           <Text style={styles.balanceLabel}>Current Balance</Text>
           <Text style={styles.balanceValue}>₦2,500.00</Text>
@@ -54,36 +62,40 @@ const RegularDisputeScreen = () => {
 
           <Text style={styles.label}>Specify Dispute Category</Text>
           <View style={styles.inputRow}>
-            <Ionicons
-              name="document-text-outline"
-              size={20}
-              color={PRIMARY_PURPLE}
-              style={styles.inputIcon}
+            <Ionicons 
+              name="document-text-outline" 
+              size={20} 
+              color="#2c5364" 
+              style={styles.inputIcon} 
             />
             <TextInput
               style={styles.input}
               placeholder="Transaction Type"
               placeholderTextColor="#999"
+              value={transactionType}
+              onChangeText={setTransactionType}
             />
           </View>
 
           <Text style={styles.label}>Description</Text>
           <View style={styles.inputRow}>
-            <Ionicons
-              name="chatbox-ellipses-outline"
-              size={20}
-              color={PRIMARY_PURPLE}
-              style={styles.inputIcon}
+            <Ionicons 
+              name="chatbox-ellipses-outline" 
+              size={20} 
+              color="#2c5364" 
+              style={styles.inputIcon} 
             />
             <TextInput
               style={[styles.input, styles.multilineInput]}
               placeholder="Enter dispute details..."
               placeholderTextColor="#999"
               multiline
+              value={description}
+              onChangeText={setDescription}
             />
           </View>
 
-          <TouchableOpacity style={styles.submitButton}>
+          <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
             <Text style={styles.submitButtonText}>SUBMIT</Text>
           </TouchableOpacity>
         </View>
@@ -93,16 +105,19 @@ const RegularDisputeScreen = () => {
 
       {/* Fixed Bottom Navigation */}
       <View style={styles.bottomNavigationContainer}>
-        <BottomNavigation navigation={navigation} />
+        <MerchantBottomNavigation navigation={navigation} />
       </View>
 
-      {/* Menu Modal */}
-      <MenuModal visible={menuVisible} onClose={() => setMenuVisible(false)} />
+      {/* Merchant Menu Modal */}
+      <MerchantMenuModal 
+        visible={menuVisible} 
+        onClose={() => setMenuVisible(false)} 
+      />
     </View>
   );
 };
 
-export default RegularDisputeScreen;
+export default MerchantDisputeScreen;
 
 const styles = StyleSheet.create({
   container: {
@@ -111,13 +126,14 @@ const styles = StyleSheet.create({
   },
   /********** HEADER **********/
   headerContainer: {
-    backgroundColor: PRIMARY_PURPLE,
-    paddingTop: 50,
+    paddingTop: 40,
     paddingBottom: 20,
     paddingHorizontal: 20,
+  },
+  headerContent: {
     flexDirection: 'row',
-    alignItems: 'center',
     justifyContent: 'space-between',
+    alignItems: 'center',
   },
   backButton: {
     marginRight: 15,
@@ -125,41 +141,39 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 20,
     fontWeight: '600',
-    color: LIGHT_TEXT,
+    color: '#fff',
   },
   menuButton: {
     padding: 5,
   },
   /********** SCROLL CONTENT **********/
   scrollContainer: {
-    paddingHorizontal: 20,
-    paddingTop: 20,
-  },
-  /********** BALANCE CARD **********/
-  balanceCard: {
-    backgroundColor: CARD_BACKGROUND,
-    borderRadius: 12,
     padding: 20,
+    paddingBottom: 100,
+  },
+  balanceCard: {
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    padding: 15,
     marginBottom: 20,
+    alignItems: 'center',
     elevation: 2,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.15,
     shadowRadius: 2,
-    alignItems: 'center',
   },
   balanceLabel: {
     fontSize: 14,
-    color: DARK_TEXT,
+    color: '#333',
     marginBottom: 5,
     opacity: 0.7,
   },
   balanceValue: {
     fontSize: 20,
     fontWeight: '700',
-    color: DARK_TEXT,
+    color: '#333',
   },
-  /********** FORM CARD **********/
   card: {
     backgroundColor: CARD_BACKGROUND,
     borderRadius: 12,
@@ -179,7 +193,7 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 16,
-    color: PRIMARY_PURPLE,
+    color: '#2c5364',
     marginBottom: 10,
   },
   inputRow: {
@@ -204,7 +218,7 @@ const styles = StyleSheet.create({
     textAlignVertical: 'top',
   },
   submitButton: {
-    backgroundColor: PRIMARY_PURPLE,
+    backgroundColor: '#2c5364',
     paddingVertical: 15,
     borderRadius: 10,
     alignItems: 'center',
@@ -212,7 +226,7 @@ const styles = StyleSheet.create({
   },
   submitButtonText: {
     fontSize: 16,
-    color: LIGHT_TEXT,
+    color: '#fff',
     fontWeight: 'bold',
   },
   /********** BOTTOM NAVIGATION **********/
@@ -221,13 +235,5 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    backgroundColor: '#fff',
-    borderTopWidth: 1,
-    borderTopColor: '#ccc',
-    elevation: 10,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: -3 },
-    shadowOpacity: 0.15,
-    shadowRadius: 5,
   },
 });

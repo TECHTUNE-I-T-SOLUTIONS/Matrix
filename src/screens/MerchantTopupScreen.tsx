@@ -1,3 +1,4 @@
+// src/screens/MerchantTopupScreen.tsx
 import React, { useState } from 'react';
 import {
   View,
@@ -9,100 +10,90 @@ import {
   Dimensions,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import BottomNavigation from '../components/BottomNavigation';
+import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
-import MenuModal from '../components/MenuModal';
+import MerchantBottomNavigation from '../components/MerchantBottomNavigation';
+import MerchantMenuModal from '../components/MerchantMenuModal';
 
 const { width } = Dimensions.get('window');
 
-const PRIMARY_PURPLE = '#2E0063';
-const LIGHT_TEXT = '#FFFFFF';
+const PRIMARY_COLOR = '#2c5364'; // Merchant theme primary color
+const LIGHT_TEXT = '#ffffff';
 const DARK_TEXT = '#333333';
-const CARD_BACKGROUND = '#FFFFFF';
+const CARD_BACKGROUND = '#ffffff'; // White background for form cards
 
-const RegularTopupScreen = () => {
+const MerchantTopupScreen = () => {
   const navigation = useNavigation();
   const [menuVisible, setMenuVisible] = useState(false);
+  const [phone, setPhone] = useState('');
+  const [amount, setAmount] = useState('');
+  const [network, setNetwork] = useState('');
+
+  const handleTopup = () => {
+    // Simulate top-up action logic here
+    console.log('Topup with:', phone, amount, network);
+  };
 
   return (
     <View style={styles.container}>
-      {/* Header */}
-      <View style={styles.headerContainer}>
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => navigation.goBack()}
-        >
+      {/* Gradient Header */}
+      <LinearGradient
+        colors={['#0f2027', '#203a43', '#2c5364']}
+        style={styles.headerContainer}
+      >
+        <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
           <Ionicons name="arrow-back" size={26} color={LIGHT_TEXT} />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Top-Up</Text>
-        {/* Menu Icon at the top right */}
-        <TouchableOpacity
-          style={styles.menuButton}
-          onPress={() => setMenuVisible(true)}
-        >
+        <TouchableOpacity style={styles.menuButton} onPress={() => setMenuVisible(true)}>
           <Ionicons name="menu" size={26} color={LIGHT_TEXT} />
         </TouchableOpacity>
-      </View>
+      </LinearGradient>
 
-      {/* Main Scrollable Content */}
-      <ScrollView
-        contentContainerStyle={styles.scrollContainer}
-        showsVerticalScrollIndicator={false}
-      >
+      {/* Main Content */}
+      <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>
         {/* Balance Card */}
         <View style={styles.balanceCard}>
           <Text style={styles.balanceLabel}>Current Balance</Text>
           <Text style={styles.balanceValue}>₦2,500.00</Text>
         </View>
 
-        {/* Airtime Top-Up Card */}
+        {/* Top-Up Form Card */}
         <View style={styles.card}>
           <Text style={styles.sectionTitle}>Airtime Top-Up</Text>
 
-          {/* PHONE NUMBER */}
           <View style={styles.inputRow}>
-            <Ionicons
-              name="call-outline"
-              size={20}
-              color={PRIMARY_PURPLE}
-              style={styles.inputIcon}
-            />
+            <Ionicons name="call-outline" size={20} color={PRIMARY_COLOR} style={styles.inputIcon} />
             <TextInput
               style={styles.input}
-              placeholder="PHONE NUMBER"
+              placeholder="Phone Number"
               placeholderTextColor="#999"
               keyboardType="phone-pad"
+              value={phone}
+              onChangeText={setPhone}
             />
           </View>
 
-          {/* AMOUNT */}
           <View style={styles.inputRow}>
-            <Ionicons
-              name="cash-outline"
-              size={20}
-              color={PRIMARY_PURPLE}
-              style={styles.inputIcon}
-            />
+            <Ionicons name="cash-outline" size={20} color={PRIMARY_COLOR} style={styles.inputIcon} />
             <TextInput
               style={styles.input}
-              placeholder="AMOUNT"
+              placeholder="Amount"
               placeholderTextColor="#999"
               keyboardType="numeric"
+              value={amount}
+              onChangeText={setAmount}
             />
           </View>
 
-          {/* NETWORK */}
           <View style={styles.inputRow}>
-            <Ionicons
-              name="cellular-outline"
-              size={20}
-              color={PRIMARY_PURPLE}
-              style={styles.inputIcon}
-            />
+            <Ionicons name="cellular-outline" size={20} color={PRIMARY_COLOR} style={styles.inputIcon} />
             <TextInput
               style={styles.input}
-              placeholder="NETWORK"
+              placeholder="Network"
               placeholderTextColor="#999"
+              value={network}
+              onChangeText={setNetwork}
             />
           </View>
 
@@ -110,48 +101,43 @@ const RegularTopupScreen = () => {
           <View style={styles.quickOptionsContainer}>
             <Text style={styles.quickOptionsTitle}>Quick Amounts</Text>
             <View style={styles.quickOptions}>
-              {['100', '200', '500', '1000', '1500', '2000', '3000', '5000'].map(
-                (amount) => (
-                  <TouchableOpacity key={amount} style={styles.quickOption}>
-                    <Text style={styles.quickOptionText}>{amount}</Text>
-                  </TouchableOpacity>
-                )
-              )}
+              {['100', '200', '500', '1000', '1500', '2000', '3000', '5000'].map((amt) => (
+                <TouchableOpacity key={amt} style={styles.quickOption} onPress={() => setAmount(amt)}>
+                  <Text style={styles.quickOptionText}>{amt}</Text>
+                </TouchableOpacity>
+              ))}
             </View>
           </View>
 
-          {/* Proceed Button */}
-          <TouchableOpacity style={styles.proceedButton}>
+          <TouchableOpacity style={styles.proceedButton} onPress={handleTopup}>
             <Text style={styles.proceedButtonText}>PROCEED</Text>
           </TouchableOpacity>
         </View>
 
-        {/* Bottom padding to ensure content is above BottomNavigation */}
         <View style={{ height: 100 }} />
       </ScrollView>
 
       {/* Fixed Bottom Navigation */}
       <View style={styles.bottomNavigationContainer}>
-        <BottomNavigation navigation={navigation} />
+        <MerchantBottomNavigation navigation={navigation} />
       </View>
 
-      {/* Menu Modal */}
-      <MenuModal visible={menuVisible} onClose={() => setMenuVisible(false)} />
+      {/* Merchant Menu Modal */}
+      <MerchantMenuModal visible={menuVisible} onClose={() => setMenuVisible(false)} />
     </View>
   );
 };
 
-export default RegularTopupScreen;
+export default MerchantTopupScreen;
 
 const styles = StyleSheet.create({
-  /********** CONTAINER & HEADER **********/
   container: {
     flex: 1,
-    backgroundColor: '#f1f1f1', // Light background for the whole screen
+    backgroundColor: '#f1f1f1',
   },
+  /********** HEADER **********/
   headerContainer: {
-    backgroundColor: PRIMARY_PURPLE,
-    paddingTop: 50,
+    paddingTop: 40,
     paddingBottom: 20,
     paddingHorizontal: 20,
     flexDirection: 'row',
@@ -169,25 +155,22 @@ const styles = StyleSheet.create({
   menuButton: {
     padding: 5,
   },
-
   /********** SCROLL CONTENT **********/
   scrollContainer: {
-    paddingHorizontal: 20,
-    paddingTop: 20,
-  },
-
-  /********** BALANCE CARD **********/
-  balanceCard: {
-    backgroundColor: CARD_BACKGROUND,
-    borderRadius: 12,
     padding: 20,
+    paddingBottom: 100,
+  },
+  balanceCard: {
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    padding: 15,
     marginBottom: 20,
+    alignItems: 'center',
     elevation: 2,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.15,
     shadowRadius: 2,
-    alignItems: 'center',
   },
   balanceLabel: {
     fontSize: 14,
@@ -200,8 +183,6 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: DARK_TEXT,
   },
-
-  /********** MAIN CARD FOR TOP-UP **********/
   card: {
     backgroundColor: CARD_BACKGROUND,
     borderRadius: 12,
@@ -219,8 +200,6 @@ const styles = StyleSheet.create({
     color: DARK_TEXT,
     marginBottom: 15,
   },
-
-  /********** INPUT ROWS **********/
   inputRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -238,8 +217,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: DARK_TEXT,
   },
-
-  /********** QUICK OPTIONS **********/
   quickOptionsContainer: {
     marginBottom: 20,
   },
@@ -256,7 +233,7 @@ const styles = StyleSheet.create({
   },
   quickOption: {
     width: '23%',
-    backgroundColor: PRIMARY_PURPLE,
+    backgroundColor: PRIMARY_COLOR,
     borderRadius: 8,
     paddingVertical: 10,
     alignItems: 'center',
@@ -267,10 +244,8 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '600',
   },
-
-  /********** PROCEED BUTTON **********/
   proceedButton: {
-    backgroundColor: PRIMARY_PURPLE,
+    backgroundColor: PRIMARY_COLOR,
     paddingVertical: 15,
     borderRadius: 10,
     alignItems: 'center',
@@ -280,20 +255,11 @@ const styles = StyleSheet.create({
     color: LIGHT_TEXT,
     fontWeight: '600',
   },
-
   /********** BOTTOM NAVIGATION **********/
   bottomNavigationContainer: {
     position: 'absolute',
     bottom: 0,
     left: 0,
     right: 0,
-    backgroundColor: '#fff',
-    borderTopWidth: 1,
-    borderTopColor: '#ccc',
-    elevation: 10,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: -3 },
-    shadowOpacity: 0.15,
-    shadowRadius: 5,
   },
 });
